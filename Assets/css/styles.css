@@ -1,0 +1,66 @@
+*, *::after, *::before{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: rgb(191, 136, 136);
+}
+
+.scorediv{
+    display: flex;
+    justify-content: center;
+}
+
+.player,
+.cpu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5vw;
+    margin-top:1vw;
+    font-size: 1vw;
+    width:5vw;
+    opacity: .8;
+}
+
+.player #playerscore,
+.cpu #cpuscore{
+    padding-left: 10px;
+}
+
+.paddle{
+    background-color: black;
+    height:15vh;
+    width: 1vw;
+    margin: 5px;
+    translate: 0 -50%;
+}
+
+.leftpaddle{
+    --leftpaddle: 50;
+    position: absolute;
+    top:calc(var(--leftpaddle) * 1vh);
+    left:0; 
+}
+
+.rightpaddle{
+    --rightpaddle: 50;
+    position: absolute;
+    top:calc(var(--rightpaddle) * 1vh);
+    right:0; 
+}
+
+.ball{
+    --ballx: 50;
+    --bally: 50;
+    position:absolute;
+    bottom:calc(var(--bally) * 1vh);
+    left:calc(var(--ballx) * 1vw);
+    height:3vh;
+    width:3vh;
+    border-radius: 100%;
+    background-color: black;
+    translate: -50% -50%;
+}
