@@ -6,6 +6,9 @@
 
 body{
     background-color: rgb(191, 136, 136);
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
 }
 
 .scorediv{
@@ -56,7 +59,7 @@ body{
     --ballx: 50;
     --bally: 50;
     position:absolute;
-    bottom:calc(var(--bally) * 1vh);
+    bottom:calc(var(--bally) * 1vw);
     left:calc(var(--ballx) * 1vw);
     height:3vh;
     width:3vh;
