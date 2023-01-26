@@ -7,6 +7,7 @@ const ball = document.querySelector(".ball")
 
 document.addEventListener("mousemove", movePaddle)
 
+//initial velocities/locations
 let BALL_XVELOCITY = -.5
 let BALL_YVELOCITY = -.5
 let BALL_XACCELERATION = -.000001
@@ -44,14 +45,11 @@ function step(){
     if (ballRect.bottom > pageRect.bottom) BALL_YVELOCITY *= -1
     
     BALL_XACCELERATION *= 1.001
+    console.log(yLocation)
 
-    //LAZY AI
-    rightPaddle.style.setProperty("--rightpaddle", ballRect.top/6)
+    //LAZY AI (/6 seems to work. not sure what the math on that really is tho)
+    rightPaddle.style.setProperty("--rightpaddle", yLocation)
 }
-
-
-//
-//||   o    ||
 
 let lastTime;
 function update(time) {
@@ -60,7 +58,7 @@ function update(time) {
         const delta = lastTime - time 
         lastTime += time
 
-        if (delta > 30) {
+        if (delta > 60) {
             step(delta)
             lastTime = time
         }
@@ -71,14 +69,14 @@ function update(time) {
 window.requestAnimationFrame(update)
 
 function movePaddle(e){
-    if(e.clientY/5 > 100) return
-    leftPaddle.style.setProperty("--leftpaddle", + (e.clientY/5))
+    if(e.clientY/6 > 100) return
+    leftPaddle.style.setProperty("--leftpaddle", + (e.clientY/6))
 }
 
 function victory(winner){
     if (winner === "player"){playerScore.innerText++
     } else cpuScore.innerText++
-    yLocation = 40
+    yLocation = 50
     xLocation = 50
     BALL_XACCELERATION = .000001
     BALL_XVELOCITY *= -1
@@ -87,11 +85,11 @@ function victory(winner){
 
 function newAngle(){
     let randomY;
-    while (randomY > Math.abs(.01) || randomY == null){
+    while (Math.abs(randomY) < .1 || randomY == null){
     randomY = rando(-.5,.5, "float")
+    console.log(randomY)
  }
     BALL_YVELOCITY = randomY
-    console.log(BALL_YVELOCITY)
 }
 
 

@@ -57,9 +57,9 @@ body{
 
 .ball{
     --ballx: 50;
-    --bally: 50;
+    --bally: 40;
     position:absolute;
-    bottom:calc(var(--bally) * 1vw);
+    top:calc(var(--bally) * 1vh);
     left:calc(var(--ballx) * 1vw);
     height:3vh;
     width:3vh;
