@@ -10,11 +10,13 @@ document.addEventListener("mousemove", movePaddle)
 //initial velocities/locations
 let BALL_XVELOCITY = -.5
 let BALL_YVELOCITY = -.5
-let BALL_XACCELERATION = -.000001
+let BALL_XACCELERATION = -.0005
 let xLocation = getComputedStyle(ball).getPropertyValue("--ballx")
 let yLocation = getComputedStyle(ball).getPropertyValue("--bally")
 
 function step(){
+    //MAYBE COMBINE ACCELERATION WITH VELOCITY? AND USE THAT TO MANIPULATE Y?
+    //BALLXVELOCITY + (BALLXACCELERATION * BALL_XVELOCITY)
     ball.style.setProperty("--ballx", parseFloat(xLocation) + parseFloat(BALL_XVELOCITY) + parseFloat(BALL_XACCELERATION))
     ball.style.setProperty("--bally", parseFloat(yLocation) + parseFloat(BALL_YVELOCITY))
 
@@ -25,13 +27,16 @@ function step(){
     const playerRect = leftPaddle.getBoundingClientRect()
     const cpuRect = rightPaddle.getBoundingClientRect()
     const ballRect = ball.getBoundingClientRect()
-
-    if(ballRect.right > cpuRect.left && ballRect.right < cpuRect.right && ballRect.y < cpuRect.bottom && ballRect.y > cpuRect.top){
+    
+    if(ballRect.right > cpuRect.left-10 && ballRect.right < cpuRect.right+10 && ballRect.y < cpuRect.bottom && ballRect.y > cpuRect.top){
         BALL_XVELOCITY *= -1
         BALL_XACCELERATION *= -1
     }
 
-    if(ballRect.x > playerRect.left && ballRect.x < playerRect.right && ballRect.y < playerRect.bottom && ballRect.y > playerRect.top){
+    //is 10 correct? maybe it fixes it
+    //   x||   o  ||x
+
+    if(ballRect.x > playerRect.left-10 && ballRect.x < playerRect.right+10 && ballRect.y < playerRect.bottom && ballRect.y > playerRect.top){
         BALL_XVELOCITY *= -1
         BALL_XACCELERATION *= -1
     }
@@ -44,11 +49,15 @@ function step(){
     
     if (ballRect.bottom > pageRect.bottom) BALL_YVELOCITY *= -1
     
-    BALL_XACCELERATION *= 1.001
-    console.log(yLocation)
+    if (BALL_XACCELERATION < 0) BALL_XACCELERATION -= .0005
+    if (BALL_XACCELERATION > 0) BALL_XACCELERATION += .0005
 
-    //LAZY AI (/6 seems to work. not sure what the math on that really is tho)
-    rightPaddle.style.setProperty("--rightpaddle", yLocation)
+    console.log(BALL_XACCELERATION)
+
+    //LAZY AI
+    //rightPaddle.style.setProperty("--rightpaddle", yLocation)
+
+    aiPaddle()
 }
 
 let lastTime;
@@ -58,7 +67,7 @@ function update(time) {
         const delta = lastTime - time 
         lastTime += time
 
-        if (delta > 60) {
+        if (delta > 16) {
             step(delta)
             lastTime = time
         }
@@ -76,22 +85,34 @@ function movePaddle(e){
 function victory(winner){
     if (winner === "player"){playerScore.innerText++
     } else cpuScore.innerText++
+
     yLocation = 50
     xLocation = 50
-    BALL_XACCELERATION = .000001
+
+    if (winner === "player") BALL_XACCELERATION = -.0005
+    if (winner === "cpu") BALL_XACCELERATION = .0005
     BALL_XVELOCITY *= -1
+
     newAngle()
 }
 
 function newAngle(){
     let randomY;
     while (Math.abs(randomY) < .1 || randomY == null){
-    randomY = rando(-.5,.5, "float")
-    console.log(randomY)
- }
+        randomY = rando(-.5,.5, "float")
+        console.log(randomY)
+    }
     BALL_YVELOCITY = randomY
 }
 
+function aiPaddle(){
+    const yPaddle = getComputedStyle(rightPaddle).getPropertyValue("--rightpaddle") 
+    const positionOffset = yPaddle - yLocation
+
+    if (positionOffset > 5) rightPaddle.style.setProperty("--rightpaddle", parseFloat(parseFloat(yPaddle)-.4))
+    if (positionOffset < -5) rightPaddle.style.setProperty("--rightpaddle", parseFloat(parseFloat(yPaddle)+.4))
+    if (positionOffset >= -5 && positionOffset <= 5) rightPaddle.style.setProperty("--rightpaddle", parseFloat(yLocation))
+}
 
 
 //COLLISSION WORKS

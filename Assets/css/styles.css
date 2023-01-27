@@ -36,7 +36,7 @@ body{
 .paddle{
     background-color: black;
     height:15vh;
-    width: 1vw;
+    width: 1.5vw;
     margin: 5px;
     translate: 0 -50%;
 }
