@@ -10,7 +10,9 @@ document.addEventListener("mousemove", movePaddle)
 //initial velocities/locations
 let BALL_XVELOCITY = -.5
 let BALL_YVELOCITY = -.5
-let BALL_XACCELERATION = -.0005
+let BALL_XACCELERATION = -.00005
+let BALL_YACCELERATION = -.00005
+
 let xLocation = getComputedStyle(ball).getPropertyValue("--ballx")
 let yLocation = getComputedStyle(ball).getPropertyValue("--bally")
 
@@ -18,7 +20,8 @@ function step(){
     //MAYBE COMBINE ACCELERATION WITH VELOCITY? AND USE THAT TO MANIPULATE Y?
     //BALLXVELOCITY + (BALLXACCELERATION * BALL_XVELOCITY)
     ball.style.setProperty("--ballx", parseFloat(xLocation) + parseFloat(BALL_XVELOCITY) + parseFloat(BALL_XACCELERATION))
-    ball.style.setProperty("--bally", parseFloat(yLocation) + parseFloat(BALL_YVELOCITY))
+    ball.style.setProperty("--bally", parseFloat(yLocation) + parseFloat(BALL_YVELOCITY)  + parseFloat(BALL_YACCELERATION))
+    
 
     xLocation = getComputedStyle(ball).getPropertyValue("--ballx")
     yLocation = getComputedStyle(ball).getPropertyValue("--bally")
@@ -27,7 +30,7 @@ function step(){
     const playerRect = leftPaddle.getBoundingClientRect()
     const cpuRect = rightPaddle.getBoundingClientRect()
     const ballRect = ball.getBoundingClientRect()
-    
+
     if(ballRect.right > cpuRect.left-10 && ballRect.right < cpuRect.right+10 && ballRect.y < cpuRect.bottom && ballRect.y > cpuRect.top){
         BALL_XVELOCITY *= -1
         BALL_XACCELERATION *= -1
@@ -45,15 +48,26 @@ function step(){
     
     if(xLocation < pageRect.left ) victory("cpu", ballRect)
 
-    if (ballRect.top < pageRect.top) BALL_YVELOCITY *= -1
+    if (ballRect.bottom < pageRect.top-10) {
+        console.log("top")
+        BALL_YVELOCITY *= -1
+        BALL_YACCELERATION *= -1
+        yLocation = 0
+    }
     
-    if (ballRect.bottom > pageRect.bottom) BALL_YVELOCITY *= -1
+    if (ballRect.top > pageRect.bottom+10){
+        console.log("bottom")
+        BALL_YVELOCITY *= -1
+        BALL_YACCELERATION *= -1
+        yLocation = 100
+    } 
     
-    if (BALL_XACCELERATION < 0) BALL_XACCELERATION -= .0005
-    if (BALL_XACCELERATION > 0) BALL_XACCELERATION += .0005
 
-    console.log(BALL_XACCELERATION)
-
+    if (BALL_XACCELERATION < 0) BALL_XACCELERATION -= .0001
+    if (BALL_XACCELERATION > 0) BALL_XACCELERATION += .0001
+    
+    if (BALL_XACCELERATION < 0) BALL_YACCELERATION -= .0001
+    if (BALL_XACCELERATION > 0) BALL_YACCELERATION += .0001
     //LAZY AI
     //rightPaddle.style.setProperty("--rightpaddle", yLocation)
 
@@ -98,8 +112,8 @@ function victory(winner){
 
 function newAngle(){
     let randomY;
-    while (Math.abs(randomY) < .1 || randomY == null){
-        randomY = rando(-.5,.5, "float")
+    while (Math.abs(randomY) < .3 || randomY == null){
+        randomY = rando(-.9,.9, "float")
         console.log(randomY)
     }
     BALL_YVELOCITY = randomY
@@ -109,14 +123,13 @@ function aiPaddle(){
     const yPaddle = getComputedStyle(rightPaddle).getPropertyValue("--rightpaddle") 
     const positionOffset = yPaddle - yLocation
 
-    if (positionOffset > 5) rightPaddle.style.setProperty("--rightpaddle", parseFloat(parseFloat(yPaddle)-.4))
-    if (positionOffset < -5) rightPaddle.style.setProperty("--rightpaddle", parseFloat(parseFloat(yPaddle)+.4))
-    if (positionOffset >= -5 && positionOffset <= 5) rightPaddle.style.setProperty("--rightpaddle", parseFloat(yLocation))
+    if (positionOffset > .5) rightPaddle.style.setProperty("--rightpaddle", parseFloat(parseFloat(yPaddle)-.5))
+    if (positionOffset < -.5) rightPaddle.style.setProperty("--rightpaddle", parseFloat(parseFloat(yPaddle)+.5))
+    if (positionOffset >= -.5 && positionOffset <= .5) rightPaddle.style.setProperty("--rightpaddle", parseFloat(yLocation))
 }
 
 
 //COLLISSION WORKS
-//TODO: RANDOM START ANGLES EACH ROUND -- DONE
-//SOMEHOW RESET THE SPEED EACH ROUND (FIGURE OUT WEIRD DELTA RAMPING ISSUE) -- DONE, ITS STEADY NOW
-//AI SOMEHOW 
-//SCALE BOTTOM/RIGHT VIEWPORT BOUNDS -- WORKS NOW
+//TODO:
+//NERF AI - DONE
+//MORE ANGLE VARIATION THROUGHO?UT GAME
