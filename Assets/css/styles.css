@@ -4,11 +4,15 @@
     box-sizing: border-box;
 }
 
+:root{
+    --hue: 350;
+}
+
 body{
-    background-color: rgb(191, 136, 136);
+    background-color: hsla(calc(var(--hue)), 100%, 30%, 1);
     overflow: hidden;
-    width: 100vw;
     height: 100vh;
+    color:hsla(calc(var(--hue)), 100%, 75%, 1);
 }
 
 .scorediv{
@@ -34,10 +38,9 @@ body{
 }
 
 .paddle{
-    background-color: black;
+    background-color: hsla(calc(var(--hue)), 100%, 15%, 1);
     height:15vh;
     width: 1.5vw;
-    margin: 5px;
     translate: 0 -50%;
 }
 
@@ -46,6 +49,7 @@ body{
     position: absolute;
     top:calc(var(--leftpaddle) * 1vh);
     left:0; 
+    margin-left: .5vw;
 }
 
 .rightpaddle{
@@ -53,6 +57,7 @@ body{
     position: absolute;
     top:calc(var(--rightpaddle) * 1vh);
     right:0; 
+    margin-right: .5vw;
 }
 
 .ball{
@@ -64,6 +69,17 @@ body{
     height:3vh;
     width:3vh;
     border-radius: 100%;
-    background-color: black;
+    background-color: hsla(calc(var(--hue)), 100%, 15%, 1);
     translate: -50% -50%;
+}
+
+.clickme {
+    position: absolute;
+    top:50%;
+    left:50%;
+    translate: -50% -50%;
+}
+
+.hide {
+    display:none
 }
