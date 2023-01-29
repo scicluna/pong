@@ -45,9 +45,9 @@ body{
 }
 
 .leftpaddle{
-    --leftpaddle: 50;
+    --leftpaddle: 50vh;
     position: absolute;
-    top:calc(var(--leftpaddle) * 1vh);
+    top:var(--leftpaddle);
     left:0; 
     margin-left: .5vw;
 }
